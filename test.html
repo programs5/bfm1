@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- <script type="text/javascript" src="lib/web3.min.js" /> -->
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+
+<script type="text/javascript">
+
+
+  if (typeof web3 !== 'undefined') {
+    web3 = new Web3(web3.currentProvider);
+  }
+  else {
+    web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/kp7Z0DFPGq7d3S2lIKEz"));
+    /*
+        или если подключаться к локальному ноду geth
+        http://127.0.0.1:8545
+
+        geth например можно запустить так:
+        '/Users/mac/Library/Application Support/Ethereum Wallet/binaries/Geth/unpacked/geth'
+        --rinkeby --rpc --rpcapi db,eth,net,web3,personal --rpcport 8545 --rpcaddr "localhost"
+        --rpccorsdomain "*" --unlock="0xc6d28b3e933db943353e9063572febe01e56dc3b"
+    */
+  }
+  // смотрим номер последнего блока
+  console.log(web3.eth.blockNumber);
+
+
+  // как выполнить транзакцию
+  // https://ethereum.stackexchange.com/questions/44156/about-security-of-web3-js-when-running-inside-a-browser
+
+
+
+
+</script>
+
+</head>
+  <body>
+    <h1>coinbase balance</h1>
+
+<!--
+    <button type="button" onClick="getAccountsBalance();">watch balance</button>
+	   <button type="button" onClick="sendTransacton();">sendTran</button>
+
+	<div></div>
+    <div id="coinbase"></div>
+    <div id="original"></div>
+    <div id="current"></div>
+    <div id="diff"></div>
+	-->
+
+  </body>
+</html>
