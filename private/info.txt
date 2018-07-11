@@ -13,3 +13,12 @@ adr:   0xf19f89209Fa45C6956b1DCE18cE03e1c85557B23
 key:   fd885ba588632dde1bb9ced5cd93f5aaa6c67b9828f493988e749faba8fd5c84
 
 balance: 0 ETH
+
+
+
+/* или если локальная нода geth (http://127.0.0.1:8545)
+
+    '/Users/mac/Library/Application Support/Ethereum Wallet/binaries/Geth/unpacked/geth'
+        --rinkeby --rpc --rpcapi db,eth,net,web3,personal --rpcport 8545 --rpcaddr "localhost"
+        --rpccorsdomain "*" --unlock="0xc6d28b3e933db943353e9063572febe01e56dc3b"
+*/
