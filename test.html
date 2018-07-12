@@ -4,17 +4,21 @@
 <script type="text/javascript" src="lib/web3.min.js" />
 
 <!-- <script type="text/javascript" src="lib/bn.js" /> -->
-<!-- <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script> -->
 
 <!-- https://github.com/ethereumjs/browser-builds -->
-<script type="text/javascript" src="lib/ethereumjs-tx-1.3.3.min.js"></script>
+<script type="text/javascript" src="lib/ethereumjs-tx-1.3.3.js"></script>
+
+<script type="text/javascript" src="lib/ethjs-signer.min.js"></script>
+
+
 
 <script type="text/javascript">
 
     // подключаемся к ноде
     web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/kp7Z0DFPGq7d3S2lIKEz"));
 
-    
+
 
    /*
    web3.eth.getBlockNumber(function(err, res) {
@@ -85,10 +89,13 @@
   // https://ethereum.stackexchange.com/questions/44156/about-security-of-web3-js-when-running-inside-a-browser
 
   function sendSigned(txData, cb) {
+      //const privateKey = new Buffer(privKey, 'hex')
       const privateKey = new Buffer(privKey, 'hex')
+
       const transaction = new Tx(txData)
 
       transaction.sign(privateKey)
+      
       const serializedTx = transaction.serialize().toString('hex')
 
       // console.log("\nRaw txn: "+'0x' + serializedTx);
