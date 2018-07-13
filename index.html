@@ -1,0 +1,115 @@
+<html>
+<head>
+<script src="lib/web3.min.js"></script>
+<script src="lib/ethereumjs-tx.js"></script>
+<script>
+
+web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/kp7Z0DFPGq7d3S2lIKEz"));
+
+function create_payment() {
+
+setLog("Start...")
+
+var private_key = document.getElementById("private_key").value
+var payee_address = document.getElementById("payee_address").value
+var gas_price = document.getElementById("gas_price").value
+var gas_limit = document.getElementById("gas_limit").value
+var payment_value = document.getElementById("payment_value").value
+
+var logger = document.getElementById('log')
+
+const privKey     = private_key //'3a530bdb187e41086da7174b21e03855e2ff25031dcec9946245978c4403d31a'
+
+const addressFrom = web3.eth.accounts.privateKeyToAccount(`0x${privKey}`).address
+const addressTo   = payee_address //'0xf19f89209Fa45C6956b1DCE18cE03e1c85557B23'
+
+setLog("Sender Address: " + addressFrom)
+//console.log(`addressFrom: ${addressFrom}\naddressTo: ${addressTo}`)
+
+web3.eth.getTransactionCount(addressFrom).then( txCount => {
+   //web3.eth.getGasPrice().then( gas_prise => {
+
+
+   // описываем транзакцию
+   var txData = {
+         from: addressFrom,
+         to: addressTo,
+         value:  web3.utils.toHex(web3.utils.toWei(payment_value, "ether")),
+         nonce: web3.utils.toHex(txCount),
+         data: '0x00',
+         gasPrice: gas_price, //1000000000,
+         gasLimit: gas_limit, //100000,
+         gas:100000,
+         chainId: 4 //Rinkeby
+   }
+
+   setLog("Get Transaction Data")
+   setLog(txData)
+
+   const tx = new EthJS.Tx(txData)
+   // подписываем транзакцию
+   tx.sign(new EthJS.Buffer.Buffer(privKey, 'hex'))
+   const rawTx = `0x${tx.serialize().toString('hex')}`
+
+   setLog(`Signed Transaction: ${rawTx}`)
+   //console.log(`rawTx: ${rawTx}`)
+
+   // отправляем транзакцию
+   web3.eth.sendSignedTransaction(rawTx)
+   .once('transactionHash', hash => {
+         //console.log( `TranHash: ${hash}`)
+         setLog(`Payment Transaction Hash: ${hash}`)
+   })
+   .then( res => {
+      //console.log(res)
+      setLog("Success Result Payment:")
+      setLog(res)
+
+   }, error => {
+      setLog(error.message)
+      console.log(error)
+   }
+)
+//})
+})
+
+
+
+
+function setLog(message) {
+   var current = new Date()
+
+   var tm = "[" + current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds() + "." + current.getMilliseconds() + "] "
+
+   if (typeof message == 'object') {
+      log.innerHTML += (JSON && JSON.stringify ? tm + JSON.stringify(message) : tm + message) + '<br />'
+   }
+   else {
+      log.innerHTML += tm + message + '<br />'
+   }
+}
+
+}
+
+</script>
+</head>
+<body>
+<br>
+<p><b>Sender Private Key:</b><br>
+   <input type="text" size="65" id="private_key" value="3a530bdb187e41086da7174b21e03855e2ff25031dcec9946245978c4403d31a"></p>
+<p><b>Payee Address:</b><br>
+   <input type="text" size="45" id="payee_address" value="0xf19f89209Fa45C6956b1DCE18cE03e1c85557B23"></p>
+<p><b>Gas Price:</b><br>
+   <input type="text" size="10" id="gas_price" value="1000000000"></p>
+<p><b>Gas Limit:</b><br>
+   <input type="text" size="10" id="gas_limit" value="100000"></p>
+<p><b>Value (ETH):</b><br>
+   <input type="text" size="10" id="payment_value" value="0.002"></p>
+
+<button onClick="create_payment()">Send money</button>
+
+<br><br>
+<div style="color:green" id="log"/>
+
+</body>
+</html>
